@@ -1,0 +1,38 @@
+elide:
+  json-api:
+    enabled: true
+    path: /api
+  graphql:
+    enabled: true
+    path: /graphql/api
+    subscription:
+      enabled: true
+      path: /subscription
+  api-docs:
+    enabled: true
+    path: /api-docs
+  jpa:
+    show-sql: true
+    properties:
+      hibernate.hbm2ddl.auto: create
+      hibernate.dialect: org.hibernate.dialect.H2Dialect
+      hibernate.current_session_context_class: thread
+      hibernate.use_scrollable_resultset: true
+      hibernate.jdbc.batch_size: 50
+      hibernate.jdbc.fetch_size: 50
+      hibernate.default_batch_fetch_size: 100
+      hibernate.connection.provider_class: com.zaxxer.hikari.hibernate.HikariConnectionProvider
+      hibernate.hikari.connectionTimeout: 20000
+      hibernate.hikari.maximumPoolSize: 30
+      hibernate.hikari.idleTimeout: 30000
+  datasource:
+    url: 'jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1'
+    username: 'sa'
+    password: ''
+    driver-class-name: 'org.h2.Driver'
+  management:
+    enabled: true
+    path: /app
+    health:
+      enabled: true
+      path: /health
