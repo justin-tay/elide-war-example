@@ -4,6 +4,9 @@
     xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
     version="6.0">
     <display-name>Elide WAR Example</display-name>
+    <absolute-ordering>
+        <others/>
+    </absolute-ordering>
     <filter>
         <filter-name>Jersey Filter</filter-name>
         <filter-class>org.glassfish.jersey.servlet.ServletContainer</filter-class>
@@ -28,4 +31,8 @@
         <filter-name>Jersey Filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <resource-env-ref>
+        <resource-env-ref-name>BeanManager</resource-env-ref-name>
+   	    <resource-env-ref-type>jakarta.enterprise.inject.spi.BeanManager</resource-env-ref-type>
+	</resource-env-ref>
 </web-app>
