@@ -5,7 +5,6 @@ import java.io.IOException;
 import example.config.properties.ManagementProperties;
 import io.smallrye.health.SmallRyeHealth;
 import io.smallrye.health.SmallRyeHealthReporter;
-import jakarta.enterprise.inject.spi.CDI;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
@@ -26,14 +25,6 @@ public class ManagementContextListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        if (managementProperties == null) {
-            managementProperties = CDI.current()
-                    .getBeanManager()
-                    .createInstance()
-                    .select(ManagementProperties.class)
-                    .get();
-        }
-
         if (managementProperties.enabled()) {
             ServletContext servletContext = sce.getServletContext();
 
@@ -54,12 +45,6 @@ public class ManagementContextListener implements ServletContextListener {
 
         @Inject
         private SmallRyeHealthReporter reporter;
-
-        public HealthServlet() {
-            if (reporter == null) {
-                reporter = CDI.current().getBeanManager().createInstance().select(SmallRyeHealthReporter.class).get();
-            }
-        }
 
         @Override
         protected void doGet(HttpServletRequest request, HttpServletResponse response) {

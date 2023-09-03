@@ -65,7 +65,7 @@
       const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
       const subscriptionUrl = protocol + '://' + window.location.host + contextPath + '/subscription';
       const fetcher = GraphiQL.createFetcher({
-        url: `${contextPath}/graphql/api`,
+        url: `${contextPath}/graphql/api/`,
         wsClient: graphqlWs.createClient({
           url: subscriptionUrl,
           lazy: false, // connect as soon as the page opens

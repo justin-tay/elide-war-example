@@ -9,7 +9,7 @@ window.onload = function() {
   // the following lines will be replaced by docker/configurator, when it runs in a docker-container
   const contextPath = window.location.pathname.substring(0, window.location.pathname.indexOf('/swagger'));
   window.ui = SwaggerUIBundle({
-    url: `${contextPath}/api-docs`,
+    url: `${contextPath}/api-docs/`,
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [

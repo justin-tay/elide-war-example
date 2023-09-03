@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.yahoo.elide.Elide;
 import com.yahoo.elide.ElideSettings;
+import com.yahoo.elide.core.dictionary.Injector;
 import com.yahoo.elide.core.security.User;
 import com.yahoo.elide.datastores.jms.websocket.SubscriptionWebSocketConfigurator;
 import com.yahoo.elide.graphql.subscriptions.hooks.SubscriptionScanner;
@@ -20,9 +21,8 @@ import com.yahoo.elide.graphql.subscriptions.websocket.SubscriptionWebSocket.Use
 
 import example.config.properties.ActiveMQProperties;
 import example.config.properties.GraphQLControllerProperties;
-import jakarta.enterprise.inject.spi.BeanManager;
-import jakarta.enterprise.inject.spi.CDI;
 import jakarta.enterprise.util.AnnotationLiteral;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.Message;
@@ -41,16 +41,22 @@ public class SubscriptionWebSocketContextListener implements ServletContextListe
     private final Logger logger = LoggerFactory.getLogger(SubscriptionWebSocketContextListener.class);
 
     private EmbeddedActiveMQ embeddedActiveMq = null;
+    
+    @Inject
+    @Named("elide")
+    private Elide elide;
+    
+    @Inject
+    private GraphQLControllerProperties graphqlControllerProperties;
+
+    @Inject
+    ActiveMQProperties activeMqProperties;
+    
+    @Inject
+    Injector injector;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        BeanManager beanManager = CDI.current().getBeanManager();
-        Elide elide = beanManager.createInstance().select(Elide.class, new NamedAnnotation("elide")).get();
-        GraphQLControllerProperties graphqlControllerProperties = beanManager.createInstance()
-                .select(GraphQLControllerProperties.class)
-                .get();
-        ActiveMQProperties activeMqProperties = beanManager.createInstance().select(ActiveMQProperties.class).get();
-
         if (!graphqlControllerProperties.enabled() || !graphqlControllerProperties.subscription().enabled()) {
             return;
         }
@@ -78,7 +84,7 @@ public class SubscriptionWebSocketContextListener implements ServletContextListe
 
                 // Things you probably don't care about...
                 .scanner(elide.getScanner())
-                .dictionary(elide.getElideSettings().getDictionary())
+                .entityDictionary(elide.getElideSettings().getEntityDictionary())
                 .connectionFactory(connectionFactory)
                 .build();
         scanner.bindLifecycleHooks();
@@ -99,6 +105,7 @@ public class SubscriptionWebSocketContextListener implements ServletContextListe
                         .auditLogger(settings.getAuditLogger())
                         .verboseErrors(true)
                         .errorMapper(settings.getErrorMapper())
+                        .injector(injector)
                         .build())
                 .build();
         try {
