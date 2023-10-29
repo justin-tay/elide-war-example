@@ -13,7 +13,7 @@ public interface ElideProperties {
     ConfigValue baseUrl();
 
     @WithDefault("500")
-    int pageSize();
+    int defaultPageSize();
 
     @WithDefault("10000")
     int maxPageSize();

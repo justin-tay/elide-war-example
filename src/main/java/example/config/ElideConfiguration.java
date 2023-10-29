@@ -17,6 +17,9 @@ import org.hibernate.jpa.boot.internal.PersistenceUnitInfoDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yahoo.elide.Elide;
 import com.yahoo.elide.ElideSettings;
 import com.yahoo.elide.ElideSettings.ElideSettingsBuilder;
@@ -37,6 +40,7 @@ import com.yahoo.elide.datastores.jpa.JpaDataStore;
 import com.yahoo.elide.datastores.jpa.PersistenceUnitInfoImpl;
 import com.yahoo.elide.datastores.jpa.transaction.NonJtaTransaction;
 import com.yahoo.elide.graphql.GraphQLSettings;
+import com.yahoo.elide.jsonapi.JsonApiMapper;
 import com.yahoo.elide.jsonapi.JsonApiSettings;
 import com.yahoo.elide.swagger.OpenApiBuilder;
 import com.yahoo.elide.swagger.resources.ApiDocsEndpoint;
@@ -89,13 +93,15 @@ public class ElideConfiguration {
 	@Dependent
 	public ElideSettingsBuilder elideSettingsBuilder(DataStore store, EntityDictionary dictionary,
 			ElideProperties elideProperties, JsonApiControllerProperties jsonApiControllerProperties,
-			GraphQLControllerProperties graphqlControllerProperties) {
+			GraphQLControllerProperties graphqlControllerProperties, JsonApiMapper jsonApiMapper,
+			ObjectMapper objectMapper) {
 		ElideSettingsBuilder builder = ElideSettings.builder().dataStore(store).entityDictionary(dictionary)
-				.defaultMaxPageSize(elideProperties.maxPageSize()).defaultPageSize(elideProperties.pageSize())
-				.auditLogger(new Slf4jLogger()).baseUrl(elideProperties.baseUrl().getValue())
-				.settings(JsonApiSettings.builder().path(jsonApiControllerProperties.path())
-						.joinFilterDialect(RSQLFilterDialect.builder().dictionary(dictionary).build())
-						.subqueryFilterDialect(RSQLFilterDialect.builder().dictionary(dictionary).build()))
+				.maxPageSize(elideProperties.maxPageSize()).defaultPageSize(elideProperties.defaultPageSize())
+				.objectMapper(objectMapper).auditLogger(new Slf4jLogger()).baseUrl(elideProperties.baseUrl().getValue())
+				.settings(
+						JsonApiSettings.builder().path(jsonApiControllerProperties.path()).jsonApiMapper(jsonApiMapper)
+								.joinFilterDialect(RSQLFilterDialect.builder().dictionary(dictionary).build())
+								.subqueryFilterDialect(RSQLFilterDialect.builder().dictionary(dictionary).build()))
 				.settings(GraphQLSettings.builder().path(graphqlControllerProperties.path()))
 				.serdes(serdes -> serdes.withISO8601Dates("yyyy-MM-dd'T'HH:mm'Z'", TimeZone.getTimeZone("UTC")));
 		if (elideProperties.verboseErrors()) {
@@ -103,6 +109,18 @@ public class ElideConfiguration {
 		}
 
 		return builder;
+	}
+
+	@Produces
+	@Singleton
+	public JsonApiMapper jsonApiMapper(ObjectMapper objectMapper) {
+		return new JsonApiMapper(objectMapper);
+	}
+
+	@Produces
+	@Singleton
+	public ObjectMapper objectMapper() {
+		return JsonMapper.builder().addModule(new JavaTimeModule()).build();
 	}
 
 	@Produces
