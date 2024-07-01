@@ -15,7 +15,6 @@ import com.yahoo.elide.ElideSettings;
 import com.yahoo.elide.core.dictionary.Injector;
 import com.yahoo.elide.core.security.User;
 import com.yahoo.elide.datastores.jms.websocket.SubscriptionWebSocketConfigurator;
-import com.yahoo.elide.graphql.GraphQLSettings.GraphQLSettingsBuilder;
 import com.yahoo.elide.graphql.subscriptions.hooks.SubscriptionScanner;
 import com.yahoo.elide.graphql.subscriptions.websocket.SubscriptionWebSocket;
 import com.yahoo.elide.graphql.subscriptions.websocket.SubscriptionWebSocket.UserFactory;
@@ -87,6 +86,7 @@ public class SubscriptionWebSocketContextListener implements ServletContextListe
                 .scanner(elide.getScanner())
                 .entityDictionary(elide.getElideSettings().getEntityDictionary())
                 .connectionFactory(connectionFactory)
+                .objectMapper(elide.getObjectMapper())
                 .build();
         scanner.bindLifecycleHooks();
 

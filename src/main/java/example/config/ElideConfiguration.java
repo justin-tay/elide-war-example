@@ -1,6 +1,8 @@
 package example.config;
 
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -255,8 +257,8 @@ public class ElideConfiguration {
 	@Produces
 	@Singleton
 	@Named("resultStorageEngine")
-	public ResultStorageEngine resultStorageEngine() {
-		return new FileResultStorageEngine(null, false);
+	public ResultStorageEngine resultStorageEngine() throws IOException {
+		return new FileResultStorageEngine(Files.createTempDirectory("elide").toString());
 	}
 
 	@Produces

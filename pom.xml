@@ -14,24 +14,24 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
 
-        <elide.version>7.0.0</elide.version>
-        <jackson-bom.version>2.15.3</jackson-bom.version>
+        <elide.version>7.1.0</elide.version>
+        <jackson-bom.version>2.17.1</jackson-bom.version>
         <jakarta-servlet.version>6.0.0</jakarta-servlet.version>
-        <smallrye-config.version>3.4.4</smallrye-config.version>
-        <smallrye-health.version>4.0.4</smallrye-health.version>
+        <smallrye-config.version>3.8.3</smallrye-config.version>
+        <smallrye-health.version>4.1.0</smallrye-health.version>
         <weld.version>5.1.2.Final</weld.version>
-        <artemis.version>2.31.2</artemis.version>
+        <artemis.version>2.35.0</artemis.version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
-        <assertj.version>3.24.2</assertj.version>
-        <tyrus.version>2.1.4</tyrus.version>
+        <assertj.version>3.26.0</assertj.version>
+        <tyrus.version>2.1.5</tyrus.version>
 
         <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
-        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-        <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
-        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <maven-failsafe-plugin.version>3.2.2</maven-failsafe-plugin.version>
-        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
-        <cargo-maven3-plugin.version>1.10.10</cargo-maven3-plugin.version>
+        <maven-jar-plugin.version>3.4.2</maven-jar-plugin.version>
+        <maven-surefire-plugin.version>3.3.0</maven-surefire-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-failsafe-plugin.version>3.3.0</maven-failsafe-plugin.version>
+        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+        <cargo-maven3-plugin.version>1.10.13</cargo-maven3-plugin.version>
     </properties>
 
     <dependencyManagement>
